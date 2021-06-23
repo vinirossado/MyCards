@@ -49,7 +49,6 @@ namespace MagicAPI.Controllers
         {
             IMtgServiceProvider serviceProvider = new MtgServiceProvider();
 
-
             ICardService service = serviceProvider.GetCardService();
             var result = await service.FindAsync("f2eb06047a3a8e515bff62b55f29468fcde6332a");
 
@@ -57,13 +56,9 @@ namespace MagicAPI.Controllers
         }
 
 
-        //[HttpGet, Route("FilterCardsQueryParameters")]
         private async Task<CardModel> FilterCardsQueryParameters(string nomeDaCarta, string set)
         {
             IMtgServiceProvider serviceProvider = new MtgServiceProvider();
-
-            //ICardService service = serviceProvider.GetCardService();
-            //IOperationResult<List<ICard>> result = await service.AllAsync();
 
             ICardService service = serviceProvider.GetCardService();
             var result = await service.Where(x => x.Name, nomeDaCarta)
@@ -104,9 +99,10 @@ namespace MagicAPI.Controllers
         [HttpPost, Route("cadastrar")]
         public async Task<ActionResult<CardModel>> Cadastrar([FromBody] CadastroCartaRequest request)
         {
-
             var cartaEncontrada = await FilterCardsQueryParameters(request.NomeCarta, request.Set);
 
+            if (cartaEncontrada == null)
+                return BadRequest("Carta não encontrada");
 
             using (var db = new ApplicationDbContext(_optionsDB))
             {
@@ -114,11 +110,28 @@ namespace MagicAPI.Controllers
                 db.SaveChanges();
             }
 
-            //await context.AddAsync(cartaEncontrada);
-            //await context.SaveChangesAsync();
-
-
             return Ok(cartaEncontrada);
+        }
+
+        [HttpPost, Route("cadastrarMultiplo")]
+        public async Task<ActionResult<CardModel>> CadastrarMultiplo([FromBody] IList<CadastroCartaRequest> request)
+        {
+            foreach (var item in request)
+            {
+                await Cadastrar(item);
+            }
+
+            return Ok("Cartas Cadastradas com sucesso");
+        }
+
+        [HttpGet, Route("cartasCadastradas")]
+        public async Task<ActionResult<IList<CardModel>>> ObterCartasCadastradas()
+        {
+            using (var db = new ApplicationDbContext(_optionsDB))
+            {
+                return await db.CardModel.ToListAsync();
+            }
+
         }
     }
 }
