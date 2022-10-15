@@ -16,7 +16,7 @@ namespace MagicAPI.Dto
 
         public string Flavor { get; set; }
 
-        public ForeignNameDto[] ForeignNames { get; set; }
+        public ForeignName[] ForeignNames { get; set; }
 
         public int? Hand { get; set; }
 

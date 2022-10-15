@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using MagicAPI.Context;
+﻿using MagicAPI.Context;
 using MagicAPI.Models;
 using MagicAPI.Request;
+using MagicAPI.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MtgApiManager.Lib.Core;
-using MtgApiManager.Lib.Model;
-using MtgApiManager.Lib.Service;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,122 +13,119 @@ namespace MagicAPI.Controllers
     [Route("[controller]")]
     public class CardController : ControllerBase
     {
+        #region Properties
+        private readonly ICardService _cardService;
+        #endregion Properties
 
-        private readonly DbContextOptions<ApplicationDbContext> _optionsDB;
+        #region Constructors
 
-        public CardController(DbContextOptions<ApplicationDbContext> optionsDB)
+        public CardController(ICardService cardService)
         {
-            _optionsDB = optionsDB;
+            _cardService = cardService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCards()
+        #endregion Constructors
+
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetCards()
+        //{
+        //    IMtgServiceProvider serviceProvider = new MtgServiceProvider();
+
+        //    ICardService service = serviceProvider.GetCardService();
+        //    IOperationResult<List<ICard>> result = await service.AllAsync();
+        //    if (result.IsSuccess)
+        //    {
+        //        var value = result.Value;
+        //    }
+        //    else
+        //    {
+        //        var exception = result.Exception;
+        //    }
+
+        //    return Ok(result);
+        //}
+
+
+        //[HttpGet, Route("find")]
+        //public async Task<ActionResult<List<ICard>>> FindCardById([FromRoute]string cardName)
+        //{
+        //    IMtgServiceProvider serviceProvider = new MtgServiceProvider();
+
+        //    ICardService service = serviceProvider.GetCardService();
+        //    var result = await service.FindAsync("Yuriko, the Tiger's Shadow");
+
+        //    return Ok(result);
+        //}
+
+
+        //[HttpGet, Route("GetAllCardsWithPagination")]
+        //public async Task<ActionResult<List<ICard>>> GetAllCardsWithPagination()
+        //{
+        //    IMtgServiceProvider serviceProvider = new MtgServiceProvider();
+
+        //    ICardService service = serviceProvider.GetCardService();
+        //    var result = await service.Where(x => x.Page, 5)
+        //                              .Where(x => x.PageSize, 250)
+        //                              .AllAsync();
+
+        //    //.Where(x => x.Name == "Predador da Escama Dilacerante")
+        //    var x = result.Value.Select(x => x.ForeignNames);
+
+        //    return Ok(result);
+        //}
+
+        //public IForeignName MapForeignName(ForeignName foreignNameDto)
+        //{
+        //    if (foreignNameDto == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(foreignNameDto));
+        //    }
+
+        //    return new ForeignName
+        //    {
+        //        Language = foreignNameDto.Language,
+        //        MultiverseId = foreignNameDto.MultiverseId,
+        //        Name = foreignNameDto.Name,
+        //    };
+        //}
+
+        //[HttpGet, Route("GetAllSets")]
+        //public async Task<ActionResult<List<ICard>>> GetAllSets()
+        //{
+        //    IMtgServiceProvider serviceProvider = new MtgServiceProvider();
+
+        //    var result = await service.AllAsync();
+
+        //    return Ok(result);
+        //}
+
+        [HttpPost, Route("register")]
+        public async Task<ActionResult<CardModel>> Register([FromBody] RegisterCardRequest request)
         {
-            IMtgServiceProvider serviceProvider = new MtgServiceProvider();
+            var cardFounded = await _cardService.Find(request.CardName, request.SetCollection);
 
-            ICardService service = serviceProvider.GetCardService();
-            IOperationResult<List<ICard>> result = await service.AllAsync();
-            if (result.IsSuccess)
-            {
-                var value = result.Value;
-            }
-            else
-            {
-                var exception = result.Exception;
-            }
+            if (cardFounded is null)
+                return BadRequest("This card was not found");
 
-            return Ok(result);
+            return Ok(cardFounded);
         }
 
-
-        [HttpGet]
-        public async Task<ActionResult<List<ICard>>> FindCardById()
+        [HttpPost, Route("register-by-list")]
+        public async Task<ActionResult<CardModel>> RegisterByList([FromBody] IList<RegisterCardRequest> cards)
         {
-            IMtgServiceProvider serviceProvider = new MtgServiceProvider();
-
-            ICardService service = serviceProvider.GetCardService();
-            var result = await service.FindAsync("f2eb06047a3a8e515bff62b55f29468fcde6332a");
-
-            return Ok(result);
-        }
-
-
-        private async Task<CardModel> FilterCardsQueryParameters(string nomeDaCarta, string set)
-        {
-            IMtgServiceProvider serviceProvider = new MtgServiceProvider();
-
-            ICardService service = serviceProvider.GetCardService();
-            var result = await service.Where(x => x.Name, nomeDaCarta)
-                                       .Where(x => x.Set, set)
-                                      .AllAsync();
-
-            var cards = new List<CardModel>();
-
-            cards.AddRange(Mapper.Map<List<CardModel>>(result.Value));
-
-            return cards[0];
-        }
-
-        [HttpGet, Route("GetAllCardsWithPagination")]
-        public async Task<ActionResult<List<ICard>>> GetAllCardsWithPagination()
-        {
-            IMtgServiceProvider serviceProvider = new MtgServiceProvider();
-
-            ICardService service = serviceProvider.GetCardService();
-            var result = await service.Where(x => x.Page, 5)
-                                      .Where(x => x.PageSize, 250)
-                                      .AllAsync();
-
-            return Ok(result);
-        }
-
-        [HttpGet, Route("GetAllSets")]
-        public async Task<ActionResult<List<ICard>>> GetAllSets()
-        {
-            IMtgServiceProvider serviceProvider = new MtgServiceProvider();
-
-            ISetService service = serviceProvider.GetSetService();
-            var result = await service.AllAsync();
-
-            return Ok(result);
-        }
-
-        [HttpPost, Route("cadastrar")]
-        public async Task<ActionResult<CardModel>> Cadastrar([FromBody] CadastroCartaRequest request)
-        {
-            var cartaEncontrada = await FilterCardsQueryParameters(request.NomeCarta, request.Set);
-
-            if (cartaEncontrada == null)
-                return BadRequest("Carta não encontrada");
-
-            using (var db = new ApplicationDbContext(_optionsDB))
-            {
-                db.CardModel.Add(cartaEncontrada);
-                db.SaveChanges();
-            }
-
-            return Ok(cartaEncontrada);
-        }
-
-        [HttpPost, Route("cadastrarMultiplo")]
-        public async Task<ActionResult<CardModel>> CadastrarMultiplo([FromBody] IList<CadastroCartaRequest> request)
-        {
-            foreach (var item in request)
-            {
-                await Cadastrar(item);
-            }
+            //foreach (var card in cards)
+            //{
+            //    await Cadastrar(card);
+            //}
 
             return Ok("Cartas Cadastradas com sucesso");
         }
 
-        [HttpGet, Route("cartasCadastradas")]
-        public async Task<ActionResult<IList<CardModel>>> ObterCartasCadastradas()
-        {
-            using (var db = new ApplicationDbContext(_optionsDB))
-            {
-                return await db.CardModel.ToListAsync();
-            }
+        //[HttpGet, Route("get-my-decks")]
+        //public async Task<ActionResult<IList<CardModel>>> GetMyDecks()
+        //{
 
-        }
+        //}
     }
 }

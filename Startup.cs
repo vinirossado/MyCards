@@ -1,12 +1,18 @@
 using MagicAPI.Context;
+using MagicAPI.IntegrationService;
+using MagicAPI.IntegrationService.Interface;
+using MagicAPI.Repository;
+using MagicAPI.Repository.Interface;
+using MagicAPI.Service;
+using MagicAPI.Service.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MtgApiManager.Lib.Service;
 using VDI.API.AutoMapper;
 
 namespace MagicAPI
@@ -27,6 +33,13 @@ namespace MagicAPI
             services.AddDbContext<ApplicationDbContext>(options =>
               options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
 
+            services.AddScoped<IMtgServiceProvider, MtgServiceProvider>();
+            services.AddScoped<Service.Interface.ICardService, CardService>();
+
+            services.AddScoped<IMTGSDkIntegrationService, MTGSDkIntegrationService>();
+            services.AddScoped<ICardMarketAPIIntegrationService, CardMarketAPIIntegrationService>();
+
+            services.AddScoped<ICardRepository, CardRepository>();
 
             AutoMapperConfiguration.RegisterMappings();
 
