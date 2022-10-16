@@ -9,8 +9,7 @@ namespace VDI.API.AutoMapper
     {
         public DomainToViewModelMappingProfile()
         {
-            CreateMap<ICard, CardModel>().ReverseMap();
-            CreateMap<IList<ICard>, CardModel>().ReverseMap();
+           
         }
     }
 }

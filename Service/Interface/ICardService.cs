@@ -5,6 +5,6 @@ namespace MagicAPI.Service.Interface
 {
     public interface ICardService
     {
-        Task<CardModel> Find(string cardName, string setCollection);
+        Task<CardModel> Register(string cardName, string setCollection);
     }
 }

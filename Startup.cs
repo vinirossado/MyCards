@@ -4,7 +4,6 @@ using MagicAPI.IntegrationService.Interface;
 using MagicAPI.Repository;
 using MagicAPI.Repository.Interface;
 using MagicAPI.Service;
-using MagicAPI.Service.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MtgApiManager.Lib.Service;
+using System;
 using VDI.API.AutoMapper;
 
 namespace MagicAPI
@@ -30,8 +30,7 @@ namespace MagicAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-              options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddDbContext<ApplicationDbContext>();
 
             services.AddScoped<IMtgServiceProvider, MtgServiceProvider>();
             services.AddScoped<Service.Interface.ICardService, CardService>();
@@ -41,7 +40,7 @@ namespace MagicAPI
 
             services.AddScoped<ICardRepository, CardRepository>();
 
-            AutoMapperConfiguration.RegisterMappings();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

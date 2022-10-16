@@ -3,6 +3,7 @@ using MagicAPI.IntegrationService.Interface;
 using MagicAPI.Models;
 using MtgApiManager.Lib.Service;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MagicAPI.IntegrationService
@@ -12,15 +13,18 @@ namespace MagicAPI.IntegrationService
         #region Properties
         private readonly IMtgServiceProvider _mtgServiceProvider;
         private readonly ICardService _service;
+        private readonly IMapper _mapper;
         #endregion Properties
 
         #region Constructors
 
-        public MTGSDkIntegrationService(IMtgServiceProvider mtgServiceProvider)
+        public MTGSDkIntegrationService(IMtgServiceProvider mtgServiceProvider, IMapper mapper)
         {
             _mtgServiceProvider = mtgServiceProvider;
 
             _service = _mtgServiceProvider.GetCardService();
+
+            _mapper = mapper;
 
         }
 
@@ -33,8 +37,12 @@ namespace MagicAPI.IntegrationService
             var result = await _service.Where(x => x.Name, cardName)
                                       .AllAsync();
 
+            if (!result.Value.Any())
+                return null;
+
+            var cardWithImages = result.Value.Where(x => x.ImageUrl != null).ToList();
             var cards = new List<CardModel>();
-            cards.AddRange(Mapper.Map<List<CardModel>>(result.Value));
+            cards.AddRange(_mapper.Map<List<CardModel>>(cardWithImages));
 
             return cards[0];
         }

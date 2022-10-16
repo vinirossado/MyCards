@@ -1,15 +1,17 @@
 using AutoMapper;
+using MagicAPI.Models;
+using MtgApiManager.Lib.Model;
+using System.Collections.Generic;
 
 namespace VDI.API.AutoMapper
 {
-    public class AutoMapperConfiguration
+    public class AutoMapperConfigurationProfile : Profile
     {
-        public static void RegisterMappings()
+        public AutoMapperConfigurationProfile()
         {
-            Mapper.Initialize(x =>
-            {
-                x.AddProfile<DomainToViewModelMappingProfile>();
-            });
+            CreateMap<ICard, CardModel>().ReverseMap();
+            CreateMap<IList<ICard>, CardModel>().ReverseMap();
+
         }
     }
 }

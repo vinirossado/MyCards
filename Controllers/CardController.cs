@@ -1,9 +1,8 @@
-﻿using MagicAPI.Context;
+﻿using MagicAPI.Helper;
 using MagicAPI.Models;
 using MagicAPI.Request;
 using MagicAPI.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -101,9 +100,9 @@ namespace MagicAPI.Controllers
         //}
 
         [HttpPost, Route("register")]
-        public async Task<ActionResult<CardModel>> Register([FromBody] RegisterCardRequest request)
+        public async Task<ActionResult<JsonReturnModel>> Register([FromBody] RegisterCardRequest card)
         {
-            var cardFounded = await _cardService.Find(request.CardName, request.SetCollection);
+            var cardFounded = await _cardService.Register(card.CardName, card.SetCollection);
 
             if (cardFounded is null)
                 return BadRequest("This card was not found");
@@ -112,12 +111,10 @@ namespace MagicAPI.Controllers
         }
 
         [HttpPost, Route("register-by-list")]
-        public async Task<ActionResult<CardModel>> RegisterByList([FromBody] IList<RegisterCardRequest> cards)
+        public async Task<ActionResult<JsonReturnModel>> RegisterByList([FromBody] IList<RegisterCardRequest> cards)
         {
-            //foreach (var card in cards)
-            //{
-            //    await Cadastrar(card);
-            //}
+            foreach (var card in cards)
+                await _cardService.Register(card.CardName, card.SetCollection);
 
             return Ok("Cartas Cadastradas com sucesso");
         }
