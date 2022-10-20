@@ -108,3 +108,5 @@ bin
 obj
 
 .vs
+
+.vscode
