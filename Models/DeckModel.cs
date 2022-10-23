@@ -7,6 +7,7 @@ namespace MagicAPI.Models
         #region Properties
 
         public int Id { get; private set; }
+
         public string CardId { get; private set; }
         public decimal Price { get; private set; }
         public int PowerLevel { get; private set; }

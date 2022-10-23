@@ -3,6 +3,7 @@ using MagicAPI.Models;
 using MagicAPI.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MagicAPI.Repository
@@ -52,7 +53,17 @@ namespace MagicAPI.Repository
             throw new System.NotImplementedException();
         }
 
+        public async Task<CardModel> GetByNameAsync(string cardName)
+        {
+            return _context.Set<CardModel>().Where(c => EF.Functions.Like(c.Name, $"%{cardName}%")).FirstOrDefault();
+        }
+
         public async Task<CardModel> UpdateAsync(CardModel model)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<CardModel> UpdateAsync(IList<CardModel> model)
         {
             throw new System.NotImplementedException();
         }

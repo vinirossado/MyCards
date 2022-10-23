@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MagicAPI.Repository.Interface
+namespace MagicAPI.Application.Interface
 {
-    public interface ICardRepository
+    public interface ICardApplication
     {
-        #region Methods
         Task<IEnumerable<CardModel>> GetAllAsync();
         Task<CardModel> GetAsync(int id);
         Task<CardModel> GetByNameAsync(string cardName);
@@ -15,6 +14,6 @@ namespace MagicAPI.Repository.Interface
         Task<CardModel> UpdateAsync(CardModel model);
         Task<CardModel> UpdateAsync(IList<CardModel> model);
         Task<bool> DeleteAsync(CardModel model);
-        #endregion
+
     }
 }

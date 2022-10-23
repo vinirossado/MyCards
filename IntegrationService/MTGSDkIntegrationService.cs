@@ -32,9 +32,9 @@ namespace MagicAPI.IntegrationService
 
         #region Methods
 
-        public async Task<CardModel> Find(string cardName, string setCollection)
+        public async Task<CardModel> Find(CardModel card)
         {
-            var result = await _service.Where(x => x.Name, cardName)
+            var result = await _service.Where(x => x.Name, card.Name)
                                       .AllAsync();
 
             if (!result.Value.Any())

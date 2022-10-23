@@ -29,8 +29,12 @@ namespace MagicAPI.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CardModel>().ToTable("Card").HasKey(x => x.Id);
-            modelBuilder.Entity<DeckModel>().ToTable("Deck").HasOne(x => x.Card).WithMany().HasForeignKey(x => x.CardId);
+            //modelBuilder.Entity<CardModel>().ToTable("Card").HasKey(x => x.Id);
+
+            //modelBuilder.Entity<DeckModel>().ToTable("Deck").HasOne(x => x.Card).WithMany().HasForeignKey(x => x.CardId);
+
+            modelBuilder.AddConfiguration(new CardMap());
+            modelBuilder.AddConfiguration(new DeckMap());
 
             OnModelCreatingPartial(modelBuilder);
         }

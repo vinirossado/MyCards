@@ -5,7 +5,7 @@ namespace MagicAPI.IntegrationService.Interface
 {
     public interface IMTGSDkIntegrationService
     {
-        Task<CardModel> Find(string cardName, string setCollection);
+        Task<CardModel> Find(CardModel card);
 
     }
 }

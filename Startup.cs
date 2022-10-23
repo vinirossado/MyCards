@@ -1,3 +1,5 @@
+using MagicAPI.Application;
+using MagicAPI.Application.Interface;
 using MagicAPI.Context;
 using MagicAPI.IntegrationService;
 using MagicAPI.IntegrationService.Interface;
@@ -33,11 +35,12 @@ namespace MagicAPI
             services.AddDbContext<ApplicationDbContext>();
 
             services.AddScoped<IMtgServiceProvider, MtgServiceProvider>();
-            services.AddScoped<Service.Interface.ICardService, CardService>();
 
             services.AddScoped<IMTGSDkIntegrationService, MTGSDkIntegrationService>();
             services.AddScoped<ICardMarketAPIIntegrationService, CardMarketAPIIntegrationService>();
 
+            services.AddScoped<ICardApplication, CardApplication>();
+            services.AddScoped<Service.Interface.ICardService, CardService>();
             services.AddScoped<ICardRepository, CardRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

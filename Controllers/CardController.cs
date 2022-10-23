@@ -1,4 +1,6 @@
-﻿using MagicAPI.Helper;
+﻿using AutoMapper;
+using MagicAPI.Application.Interface;
+using MagicAPI.Helper;
 using MagicAPI.Models;
 using MagicAPI.Request;
 using MagicAPI.Service.Interface;
@@ -13,14 +15,16 @@ namespace MagicAPI.Controllers
     public class CardController : ControllerBase
     {
         #region Properties
-        private readonly ICardService _cardService;
+        private readonly ICardApplication _cardApplication;
+        private readonly IMapper _mapper;
         #endregion Properties
 
         #region Constructors
 
-        public CardController(ICardService cardService)
+        public CardController(ICardApplication cardApplication, IMapper mapper)
         {
-            _cardService = cardService;
+            _cardApplication = cardApplication;
+            _mapper = mapper;
         }
 
         #endregion Constructors
@@ -102,10 +106,11 @@ namespace MagicAPI.Controllers
         [HttpPost, Route("register")]
         public async Task<ActionResult<JsonReturnModel>> Register([FromBody] RegisterCardRequest card)
         {
-            var cardFounded = await _cardService.Register(card.CardName, card.SetCollection);
+            var cardMapped = _mapper.Map<CardModel>(card);
+            var cardFounded = await _cardApplication.CreateAsync(cardMapped);
 
-            if (cardFounded is null)
-                return BadRequest("This card was not found");
+            //if (cardFounded is null)
+            //    return BadRequest("This card was not found");
 
             return Ok(cardFounded);
         }
@@ -113,8 +118,8 @@ namespace MagicAPI.Controllers
         [HttpPost, Route("register-by-list")]
         public async Task<ActionResult<JsonReturnModel>> RegisterByList([FromBody] IList<RegisterCardRequest> cards)
         {
-            foreach (var card in cards)
-                await _cardService.Register(card.CardName, card.SetCollection);
+            //foreach (var card in cards)
+            //    await _cardApplication.RegisterAsync(card.CardName, card.SetCollection);
 
             return Ok("Cartas Cadastradas com sucesso");
         }
