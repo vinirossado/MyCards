@@ -31,7 +31,6 @@ namespace MagicAPI.Application
         public async Task<CardModel> CreateAsync(CardModel model)
         {
             CardModel cardDb = await _cardService.GetByNameAsync(model.Name);
-            //CardModel cardDbSDK = null;
 
             if (cardDb is null)
                 cardDb = await _mtgSDKIntegrationService.Find(model);
