@@ -38,6 +38,13 @@ namespace MagicAPI.Repository
             throw new System.NotImplementedException();
         }
 
+        public async Task<DeckCardModel> CreateDeckCardAsync(DeckCardModel cards)
+        {
+            await _context.DeckCard.AddAsync(cards);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+
         public async Task<bool> DeleteAsync(CardModel model)
         {
             throw new System.NotImplementedException();

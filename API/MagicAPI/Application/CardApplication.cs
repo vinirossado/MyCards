@@ -38,8 +38,7 @@ namespace MagicAPI.Application
             //if (cardDb is null)
             //    throw new Exception($"The card ${model.Name} is already registered.");
 
-            //return _cardService.RegisterAsync(cardName, setCollection);
-            return cardDb;
+            return await _cardService.CreateAsync(cardDb);
         }
 
         public async Task<bool> CreateAsync(IList<CardModel> model)

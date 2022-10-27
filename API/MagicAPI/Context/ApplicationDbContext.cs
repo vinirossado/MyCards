@@ -26,6 +26,9 @@ namespace MagicAPI.Context
         }
         public virtual DbSet<CardModel> Card { get; set; } = null;
         public virtual DbSet<DeckModel> Deck { get; set; } = null;
+        public virtual DbSet<PlayerModel> Player { get; set; } = null;
+        public virtual DbSet<DeckCardModel> DeckCard { get; set; } = null;
+        public virtual DbSet<DeckPlayerModel> DeckPlayer { get; set; } = null;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +38,9 @@ namespace MagicAPI.Context
 
             modelBuilder.AddConfiguration(new CardMap());
             modelBuilder.AddConfiguration(new DeckMap());
+            modelBuilder.AddConfiguration(new PlayerMap());
+            modelBuilder.AddConfiguration(new DeckCardMap());
+            modelBuilder.AddConfiguration(new DeckPlayerMap());
 
             OnModelCreatingPartial(modelBuilder);
         }

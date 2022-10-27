@@ -1,0 +1,7 @@
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.csproj.AssemblyReference.cache
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.AssemblyInfoInputs.cache
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.AssemblyInfo.cs
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.csproj.CoreCompileInputs.cache
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.MvcApplicationPartsAssemblyInfo.cs
+D:\Dev\CDC\MyCards\API\obj\Debug\net6.0\MagicAPI.MvcApplicationPartsAssemblyInfo.cache

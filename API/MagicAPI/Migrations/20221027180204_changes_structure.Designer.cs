@@ -3,6 +3,7 @@ using System;
 using MagicAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221027180204_changes_structure")]
+    partial class changes_structure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -125,37 +127,9 @@ namespace MagicAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CardId");
-
                     b.HasIndex("DeckId");
 
                     b.ToTable("DeckCard", (string)null);
-                });
-
-            modelBuilder.Entity("MagicAPI.Models.DeckModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Guild")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("PowerLevel")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Deck", (string)null);
                 });
 
             modelBuilder.Entity("MagicAPI.Models.DeckPlayerModel", b =>
@@ -195,31 +169,25 @@ namespace MagicAPI.Migrations
 
             modelBuilder.Entity("MagicAPI.Models.DeckCardModel", b =>
                 {
-                    b.HasOne("MagicAPI.Models.CardModel", "Card")
+                    b.HasOne("MagicAPI.Models.DeckCardModel", "Deck")
                         .WithMany()
-                        .HasForeignKey("CardId");
-
-                    b.HasOne("MagicAPI.Models.DeckModel", "Deck")
-                        .WithMany("Cards")
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Card");
 
                     b.Navigation("Deck");
                 });
 
             modelBuilder.Entity("MagicAPI.Models.DeckPlayerModel", b =>
                 {
-                    b.HasOne("MagicAPI.Models.DeckModel", "Deck")
-                        .WithMany()
+                    b.HasOne("MagicAPI.Models.DeckCardModel", "Deck")
+                        .WithMany("Cards")
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MagicAPI.Models.PlayerModel", "Player")
-                        .WithMany("Decks")
+                        .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -229,14 +197,9 @@ namespace MagicAPI.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("MagicAPI.Models.DeckModel", b =>
+            modelBuilder.Entity("MagicAPI.Models.DeckCardModel", b =>
                 {
                     b.Navigation("Cards");
-                });
-
-            modelBuilder.Entity("MagicAPI.Models.PlayerModel", b =>
-                {
-                    b.Navigation("Decks");
                 });
 #pragma warning restore 612, 618
         }

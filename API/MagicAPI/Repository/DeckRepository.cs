@@ -7,32 +7,32 @@ namespace MagicAPI.Repository
 {
     public class DeckRepository : IDeckRepository
     {
-        public async Task<DeckModel> CreateAsync(DeckModel model)
+        public async Task<DeckCardModel> CreateAsync(DeckCardModel model)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<bool> CreateAsync(IList<DeckModel> model)
+        public async Task<bool> CreateAsync(IList<DeckCardModel> model)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<bool> DeleteAsync(DeckModel model)
+        public async Task<bool> DeleteAsync(DeckCardModel model)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<IEnumerable<DeckModel>> GetAllAsync()
+        public async Task<IEnumerable<DeckCardModel>> GetAllAsync()
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<DeckModel> GetAsync(int id)
+        public async Task<DeckCardModel> GetAsync(int id)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<DeckModel> UpdateAsync(DeckModel model)
+        public async Task<DeckCardModel> UpdateAsync(DeckCardModel model)
         {
             throw new System.NotImplementedException();
         }

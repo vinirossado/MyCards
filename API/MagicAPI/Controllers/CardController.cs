@@ -118,8 +118,10 @@ namespace MagicAPI.Controllers
         [HttpPost, Route("register-by-list")]
         public async Task<ActionResult<JsonReturnModel>> RegisterByList([FromBody] IList<RegisterCardRequest> cards)
         {
-            //foreach (var card in cards)
-            //    await _cardApplication.RegisterAsync(card.CardName, card.SetCollection);
+            var cardsMapper = _mapper.Map<IList<CardModel>>(cards);
+
+            foreach (var card in cardsMapper)
+                await _cardApplication.CreateAsync(card);
 
             return Ok("Cartas Cadastradas com sucesso");
         }

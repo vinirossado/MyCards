@@ -3,6 +3,7 @@ using System;
 using MagicAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221027175551_added_entities_")]
+    partial class added_entities_
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -111,7 +113,7 @@ namespace MagicAPI.Migrations
                     b.ToTable("Card", (string)null);
                 });
 
-            modelBuilder.Entity("MagicAPI.Models.DeckCardModel", b =>
+            modelBuilder.Entity("MagicAPI.Models.DeckModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,35 +127,7 @@ namespace MagicAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CardId");
-
                     b.HasIndex("DeckId");
-
-                    b.ToTable("DeckCard", (string)null);
-                });
-
-            modelBuilder.Entity("MagicAPI.Models.DeckModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Guild")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("PowerLevel")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
 
                     b.ToTable("Deck", (string)null);
                 });
@@ -193,19 +167,13 @@ namespace MagicAPI.Migrations
                     b.ToTable("Player", (string)null);
                 });
 
-            modelBuilder.Entity("MagicAPI.Models.DeckCardModel", b =>
+            modelBuilder.Entity("MagicAPI.Models.DeckModel", b =>
                 {
-                    b.HasOne("MagicAPI.Models.CardModel", "Card")
-                        .WithMany()
-                        .HasForeignKey("CardId");
-
                     b.HasOne("MagicAPI.Models.DeckModel", "Deck")
-                        .WithMany("Cards")
+                        .WithMany()
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Card");
 
                     b.Navigation("Deck");
                 });
@@ -213,13 +181,13 @@ namespace MagicAPI.Migrations
             modelBuilder.Entity("MagicAPI.Models.DeckPlayerModel", b =>
                 {
                     b.HasOne("MagicAPI.Models.DeckModel", "Deck")
-                        .WithMany()
+                        .WithMany("Cards")
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MagicAPI.Models.PlayerModel", "Player")
-                        .WithMany("Decks")
+                        .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -232,11 +200,6 @@ namespace MagicAPI.Migrations
             modelBuilder.Entity("MagicAPI.Models.DeckModel", b =>
                 {
                     b.Navigation("Cards");
-                });
-
-            modelBuilder.Entity("MagicAPI.Models.PlayerModel", b =>
-                {
-                    b.Navigation("Decks");
                 });
 #pragma warning restore 612, 618
         }

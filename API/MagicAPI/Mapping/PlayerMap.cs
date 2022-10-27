@@ -5,15 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MagicAPI.Mapping
 {
-    public class DeckMap : EntityTypeConfiguration<DeckModel>
+    public class PlayerMap : EntityTypeConfiguration<PlayerModel>
     {
-        public override void Map(EntityTypeBuilder<DeckModel> builder)
+        public override void Map(EntityTypeBuilder<PlayerModel> builder)
         {
-
-            builder.ToTable("Deck");
+            builder.ToTable("Player");
 
             builder.HasKey(x => x.Id);
-
         }
     }
 }

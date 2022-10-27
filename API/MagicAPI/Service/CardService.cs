@@ -55,7 +55,10 @@ namespace MagicAPI.Service
         public async Task<CardModel> CreateAsync(CardModel model)
         {
             //var cardFounded = await _mtgSDKIntegrationService.Find(model);
-            await _cardRepository.CreateAsync(model);
+            //await _cardRepository.CreateAsync(model);
+            var deckCardModel = new DeckCardModel(1, model.Id);
+            await _cardRepository.CreateDeckCardAsync(deckCardModel);
+
             return model;
         }
 
