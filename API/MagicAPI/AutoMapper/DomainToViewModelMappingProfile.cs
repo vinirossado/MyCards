@@ -1,7 +1,4 @@
 using AutoMapper;
-using MagicAPI.Models;
-using MtgApiManager.Lib.Model;
-using System.Collections.Generic;
 
 namespace VDI.API.AutoMapper
 {
@@ -9,7 +6,7 @@ namespace VDI.API.AutoMapper
     {
         public DomainToViewModelMappingProfile()
         {
-           
+
         }
     }
 }

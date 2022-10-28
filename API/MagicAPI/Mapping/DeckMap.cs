@@ -11,7 +11,6 @@ namespace MagicAPI.Mapping
         {
 
             builder.ToTable("Deck");
-
             builder.HasKey(x => x.Id);
 
         }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MagicAPI.Request
+﻿namespace MagicAPI.Request
 {
     public class RegisterCardRequest
     {

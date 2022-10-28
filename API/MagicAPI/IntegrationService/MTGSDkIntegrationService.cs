@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MagicAPI.IntegrationService
 {
-    public class MTGSDkIntegrationService : IMTGSDkIntegrationService
+    public class MTGSDkIntegrationService : ICardSDkIntegrationService
     {
         #region Properties
         private readonly IMtgServiceProvider _mtgServiceProvider;

@@ -1,11 +1,10 @@
 ﻿using MagicAPI.Models;
-using MagicAPI.Repository.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MagicAPI.Repository
 {
-    public class DeckRepository : IDeckRepository
+    public class DeckRepository
     {
         public async Task<DeckCardModel> CreateAsync(DeckCardModel model)
         {
