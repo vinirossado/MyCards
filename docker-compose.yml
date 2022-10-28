@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  application:
+    container_name: application
+    build:
+      context: .
+    ports:
+      - 5287:5287
+    environment:
+      - A=A
+      - ASPNETCORE_URLS=http://localhost:5287
+      # - ASPNETCORE_ENVIRONMENT=Development
