@@ -8,6 +8,4 @@ services:
     ports:
       - 5287:5287
     environment:
-      - A=A
-      - ASPNETCORE_URLS=http://localhost:5287
-      # - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:5287
