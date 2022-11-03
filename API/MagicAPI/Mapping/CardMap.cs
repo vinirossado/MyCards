@@ -10,7 +10,6 @@ namespace MagicAPI.Mapping
         public override void Map(EntityTypeBuilder<CardModel> builder)
         {
             builder.ToTable("Card");
-
             builder.HasKey(x => x.Id);
         }
     }

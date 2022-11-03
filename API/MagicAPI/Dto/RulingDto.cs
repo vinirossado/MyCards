@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace MagicAPI.Dto
+﻿namespace MagicAPI.Dto
 {
     public class RulingDto
     {

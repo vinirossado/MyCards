@@ -1,9 +1,6 @@
-﻿using MagicAPI.Models.Interface;
-using System.Text.Json.Serialization;
-
-namespace MagicAPI.Dto
+﻿namespace MagicAPI.Dto
 {
-    public class ForeignName : IForeignName
+    public class ForeignName
     {
         public string Language { get; set; }
         public int? MultiverseId { get; set; }

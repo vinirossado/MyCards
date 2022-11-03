@@ -1,25 +1,23 @@
-﻿using MagicAPI.Application.Interface;
-using MagicAPI.IntegrationService;
-using MagicAPI.IntegrationService.Interface;
+﻿using MagicAPI.IntegrationService.Interface;
 using MagicAPI.Models;
-using MagicAPI.Service.Interface;
+using MagicAPI.Service;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MagicAPI.Application
 {
-    public class CardApplication : ICardApplication
+    public class CardApplication
     {
 
         #region Properties
-        private readonly ICardService _cardService;
-        private readonly IMTGSDkIntegrationService _mtgSDKIntegrationService;
+        private readonly CardService _cardService;
+        private readonly ICardSDkIntegrationService _mtgSDKIntegrationService;
 
         #endregion Properties
 
         #region Constructors
-        public CardApplication(ICardService cardService, IMTGSDkIntegrationService mtgSDKIntegrationService)
+        public CardApplication(CardService cardService, ICardSDkIntegrationService mtgSDKIntegrationService)
         {
             _cardService = cardService;
             _mtgSDKIntegrationService = mtgSDKIntegrationService;

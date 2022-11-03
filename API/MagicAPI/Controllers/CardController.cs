@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using MagicAPI.Application.Interface;
+using MagicAPI.Application;
 using MagicAPI.Helper;
 using MagicAPI.Models;
 using MagicAPI.Request;
-using MagicAPI.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,13 +14,13 @@ namespace MagicAPI.Controllers
     public class CardController : ControllerBase
     {
         #region Properties
-        private readonly ICardApplication _cardApplication;
+        private readonly CardApplication _cardApplication;
         private readonly IMapper _mapper;
         #endregion Properties
 
         #region Constructors
 
-        public CardController(ICardApplication cardApplication, IMapper mapper)
+        public CardController(CardApplication cardApplication, IMapper mapper)
         {
             _cardApplication = cardApplication;
             _mapper = mapper;

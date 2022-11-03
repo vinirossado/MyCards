@@ -1,21 +1,19 @@
-﻿using MagicAPI.IntegrationService.Interface;
-using MagicAPI.Models;
-using MagicAPI.Repository.Interface;
+﻿using MagicAPI.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ICardService = MagicAPI.Service.Interface.ICardService;
+using MagicAPI.Repository;
 
 namespace MagicAPI.Service
 {
-    public class CardService : ICardService
+    public class CardService
     {
         #region Properties
-        private readonly ICardRepository _cardRepository;
+        private readonly CardRepository _cardRepository;
         #endregion Properties
 
         #region Constructors
 
-        public CardService(ICardRepository cardRepository)
+        public CardService(CardRepository cardRepository)
         {
             _cardRepository = cardRepository;
         }

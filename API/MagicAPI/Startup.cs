@@ -1,21 +1,17 @@
 using MagicAPI.Application;
-using MagicAPI.Application.Interface;
 using MagicAPI.Context;
 using MagicAPI.IntegrationService;
 using MagicAPI.IntegrationService.Interface;
 using MagicAPI.Repository;
-using MagicAPI.Repository.Interface;
 using MagicAPI.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MtgApiManager.Lib.Service;
 using System;
-using VDI.API.AutoMapper;
 
 namespace MagicAPI
 {
@@ -31,21 +27,29 @@ namespace MagicAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //Database
             services.AddDbContext<ApplicationDbContext>();
 
+            //Application Layer
+            services.AddScoped<CardApplication>();
+
+            //Service Layer
+            services.AddScoped<CardService>();
+
+            services.AddScoped<ICardSDkIntegrationService, MTGSDkIntegrationService>();
+            services.AddScoped<ICardSDkIntegrationService, CardMarketAPIIntegrationService>();
+
+            //Output Layer
             services.AddScoped<IMtgServiceProvider, MtgServiceProvider>();
+            services.AddScoped<CardRepository>();
+            services.AddScoped<DeckRepository>();
 
-            services.AddScoped<IMTGSDkIntegrationService, MTGSDkIntegrationService>();
-            services.AddScoped<ICardMarketAPIIntegrationService, CardMarketAPIIntegrationService>();
-
-            services.AddScoped<ICardApplication, CardApplication>();
-            services.AddScoped<Service.Interface.ICardService, CardService>();
-            services.AddScoped<ICardRepository, CardRepository>();
-
+            //Mappers
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
+
+            //Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MagicAPI", Version = "v1" });

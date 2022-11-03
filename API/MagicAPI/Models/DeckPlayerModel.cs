@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MagicAPI.Models
+﻿namespace MagicAPI.Models
 {
     public class DeckPlayerModel
     {
