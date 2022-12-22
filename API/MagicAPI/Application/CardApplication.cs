@@ -36,7 +36,8 @@ namespace MagicAPI.Application
                 cardDb = await _mtgSDKIntegrationService.Find(model);
 
             //if (cardDb is null)
-            //    throw new Exception($"The card ${model.Name} is already registered.");
+                //throw new Exception($"Card ${model.Name} is already registered.");
+                //throw new Exception($"The card ${model.Name} is already registered.");
 
             return await _cardService.CreateAsync(cardDb);
         }

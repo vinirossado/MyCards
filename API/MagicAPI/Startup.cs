@@ -8,14 +8,18 @@ using MagicAPI.Repository.Interface;
 using MagicAPI.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MtgApiManager.Lib.Service;
 using System;
-using VDI.API.AutoMapper;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Newtonsoft.Json;
+using MagicAPI.Service.Interface;
+using MagicAPI.Models.Interface;
+using MagicAPI.Models;
 
 namespace MagicAPI
 {
@@ -31,6 +35,7 @@ namespace MagicAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddDbContext<ApplicationDbContext>();
 
@@ -39,13 +44,29 @@ namespace MagicAPI
             services.AddScoped<IMTGSDkIntegrationService, MTGSDkIntegrationService>();
             services.AddScoped<ICardMarketAPIIntegrationService, CardMarketAPIIntegrationService>();
 
+
             services.AddScoped<ICardApplication, CardApplication>();
             services.AddScoped<Service.Interface.ICardService, CardService>();
+            services.AddScoped<IDeckCardService, DeckCardService>();
             services.AddScoped<ICardRepository, CardRepository>();
+
+            services.AddScoped<IDeckApplication, DeckApplication>();
+            services.AddScoped<Service.Interface.IDeckService, DeckService>();
+            services.AddScoped<IDeckRepository, DeckRepository>();
+            services.AddScoped<IDeckCardRepository, DeckCardRepository>();
+            services.AddMemoryCache();
+
+            services.AddCors();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(x =>
+                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            //string json = JsonConvert.SerializeObject( 
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MagicAPI", Version = "v1" });
@@ -61,6 +82,12 @@ namespace MagicAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MagicAPI v1"));
             }
+
+            var allowedOrigins = "http://localhost:4200";
+            app.UseCors(x => x
+                .WithOrigins(allowedOrigins)
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseHttpsRedirection();
 

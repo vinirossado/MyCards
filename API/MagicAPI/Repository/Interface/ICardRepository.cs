@@ -11,6 +11,8 @@ namespace MagicAPI.Repository.Interface
         Task<CardModel> GetAsync(int id);
         Task<CardModel> GetByNameAsync(string cardName);
         Task<CardModel> CreateAsync(CardModel model);
+        Task<IList<CardModel>> GetCardsByDeckId(int deckId);
+
         Task<DeckCardModel> CreateDeckCardAsync(DeckCardModel model);
         Task<bool> CreateAsync(IList<CardModel> model);
         Task<CardModel> UpdateAsync(CardModel model);

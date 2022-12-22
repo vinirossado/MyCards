@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MagicAPI.Models
 {
-    public class DeckModel
+    public class DeckModel : Entity<DeckModel, int>
     {
 
         #region Properties
@@ -12,27 +12,35 @@ namespace MagicAPI.Models
         public decimal Price { get; private set; }
         public int PowerLevel { get; private set; }
         public string Guild { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
 
-        public virtual IList<DeckCardModel> Cards { get; set; }
+        public virtual IList<DeckCardModel>? DeckCards { get; set; }
         #endregion Properties
 
         #region Constructors
-        protected DeckModel() { }
+        public DeckModel() { }
 
-        public DeckModel(int id, string name, decimal price, int powerLevel, string guild, DateTime updatedAt)
+        public DeckModel(string name, decimal price, int powerLevel, string guild)
+        {
+            Name = name;
+            Price = price;
+            PowerLevel = powerLevel;
+            Guild = guild;
+            UpdatedAt = DateTime.UtcNow;
+
+        }
+        #endregion Constructors
+
+        #region Methods
+        private void Update(int id, string name, decimal price, int powerLevel, string guild)
         {
             Id = id;
             Name = name;
             Price = price;
             PowerLevel = powerLevel;
             Guild = guild;
-            UpdatedAt = updatedAt;
+            UpdatedAt = DateTime.UtcNow;
         }
-        #endregion Constructors
-
-        #region Methods
-
         #endregion Methods
 
     }

@@ -65,6 +65,16 @@ namespace MagicAPI.Repository
             return _context.Set<CardModel>().Where(c => EF.Functions.Like(c.Name, $"%{cardName}%")).FirstOrDefault();
         }
 
+        public async Task<IList<CardModel>> GetCardsByDeckId(int deckId)
+        {
+            var deck = (from dc in _context.DeckCard
+                        join c in _context.Card on dc.CardId equals c.Id
+                        where dc.DeckId == deckId
+                        select new CardModel(c.ImageUrl)).ToList();
+
+            return deck;
+        }
+
         public async Task<CardModel> UpdateAsync(CardModel model)
         {
             throw new System.NotImplementedException();

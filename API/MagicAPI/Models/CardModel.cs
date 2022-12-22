@@ -133,6 +133,10 @@ namespace MagicAPI.Models
 
         #region Constructors
         protected CardModel() { }
+        public CardModel(string imageUrl)
+        {
+            ImageUrl = imageUrl;
+        }
         public CardModel(string artist, string border, float? cmc, string flavor, int? hand, string id, string imageUrl, string layout, int? life, string loyalty, string manaCost, string multiverseId, string name, string number, string originalText, string originalType, string power, string rarity, string releaseDate, bool? reserved, string set, string setName, string source, bool? starter, string text, bool? timeshifted, string toughness, string type, string watermark)
         {
             Artist = artist;

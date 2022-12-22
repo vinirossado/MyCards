@@ -16,7 +16,7 @@ namespace MagicAPI.Mapping
 
             builder.HasOne(x => x.Card).WithMany().HasForeignKey(x => x.CardId);
 
-            builder.HasOne(x => x.Deck).WithMany(y => y.Cards).HasForeignKey(x => x.DeckId);
+            builder.HasOne(x => x.Deck).WithMany(y => y.DeckCards).HasForeignKey(x => x.DeckId);
 
         }
     }

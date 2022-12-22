@@ -82,6 +82,17 @@ namespace MagicAPI.Service
             throw new System.NotImplementedException();
         }
 
+        private async Task<bool> CardAlreadyExist(string cardName)
+        {
+            await _cardRepository.GetByNameAsync(cardName);
+            return true;
+        }
+
+        public async Task<IEnumerable<CardModel>> GetCardsByDeckIdAsync(int deckId)
+        {
+            return await _cardRepository.GetCardsByDeckId(deckId);
+        }
+
         #endregion Methods
 
     }

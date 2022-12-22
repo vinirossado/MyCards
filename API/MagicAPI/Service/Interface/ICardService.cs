@@ -9,6 +9,8 @@ namespace MagicAPI.Service.Interface
         Task<IEnumerable<CardModel>> GetAllAsync();
         Task<CardModel> GetAsync(int id);
         Task<CardModel> GetByNameAsync(string cardName);
+        Task<IEnumerable<CardModel>> GetCardsByDeckIdAsync(int deckId);
+
         Task<CardModel> CreateAsync(CardModel model);
         Task<bool> CreateAsync(IList<CardModel> model);
         Task<CardModel> UpdateAsync(CardModel model);
