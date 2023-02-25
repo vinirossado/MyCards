@@ -43,7 +43,6 @@ namespace MagicAPI.Application
 
         #endregion Constructors
 
-
         #region Methods
 
         public Task<DeckModel> AddAsync(DeckModel obj)
@@ -84,8 +83,10 @@ namespace MagicAPI.Application
         {
             var deckDb = await _deckService.GetAsync(id);
             var deckMapped = _mapper.Map<DeckDto>(deckDb);
+
             var cardsDeck = await _cardService.GetCardsByDeckIdAsync(deckDb.Id);
             deckMapped.CardsUrl = cardsDeck.Select(x => x.ImageUrl).ToList();
+
             return deckMapped;
         }
 

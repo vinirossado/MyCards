@@ -17,7 +17,6 @@ namespace VDI.API.AutoMapper
             CreateMap<CardModel, RegisterCardRequest>().ReverseMap()
                .ForMember(x => x.Name, opt => opt.MapFrom(x => x.CardName));
 
-
             CreateMap<IEnumerable<CardModel>, IEnumerable<RegisterCardRequest>>().ReverseMap();
 
             CreateMap<DeckDto, DeckModel>().ReverseMap();

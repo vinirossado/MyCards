@@ -42,6 +42,8 @@ namespace MagicAPI.Application
             return await _cardService.CreateAsync(cardDb);
         }
 
+
+        
         public async Task<bool> CreateAsync(IList<CardModel> model)
         {
             //var cardDb = _cardService.Get(cardName);

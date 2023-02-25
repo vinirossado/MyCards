@@ -1,11 +1,7 @@
 ﻿using MagicAPI.Context;
-using MagicAPI.Dto;
 using MagicAPI.Models;
 using MagicAPI.Repository.Base;
-using MagicAPI.Repository.Base.Interface;
 using MagicAPI.Repository.Interface;
-using Microsoft.EntityFrameworkCore;
-using MtgApiManager.Lib.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

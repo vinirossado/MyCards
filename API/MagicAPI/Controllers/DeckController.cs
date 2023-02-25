@@ -1,8 +1,10 @@
-﻿using AutoMapper;
-using MagicAPI.Application.Interface;
+﻿using MagicAPI.Application.Interface;
 using MagicAPI.Dto;
 using MagicAPI.Helper;
+using MagicAPI.HubsConfig.Interface;
+using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,22 +16,31 @@ namespace MagicAPI.Controllers
     {
         #region Properties
         private readonly IDeckApplication _deckApplication;
+        private IHubContext<MessageHub, IMessageHubClient> _messageHub;
+
 
         #endregion Properties
 
         #region Constructors
-        public DeckController(IDeckApplication deckApplication)
+        public DeckController(IDeckApplication deckApplication, IHubContext<MessageHub, IMessageHubClient> messageHub)
         {
             _deckApplication = deckApplication;
+            _messageHub = messageHub;
         }
         #endregion Constructors  
 
         #region Methods
         [HttpGet, Route("{id}")]
-        public async Task<ActionResult<DeckDto>> Get([FromRoute] int id)
+        public string Get([FromRoute] int id)
         {
-            var db = await _deckApplication.GetAsync(id);
-            return Ok(db);
+            List<string> offers = new List<string>();
+            offers.Add("20% Off on IPhone 12");
+            offers.Add("15% Off on HP Pavillion");
+            offers.Add("25% Off on Samsung Smart TV");
+            _messageHub.Clients.All.SendOffersToUser(offers);
+            return "Offers sent successfully to all users!";
+            //var db = await _deckApplication.GetAsync(id);
+            //return Ok(db);
         }
 
         [HttpPost]

@@ -20,6 +20,9 @@ using Newtonsoft.Json;
 using MagicAPI.Service.Interface;
 using MagicAPI.Models.Interface;
 using MagicAPI.Models;
+using MagicAPI.HubsConfig;
+using MagicAPI.HubsConfig.Interface;
+using Microsoft.AspNet.SignalR;
 
 namespace MagicAPI
 {
@@ -54,6 +57,7 @@ namespace MagicAPI
             services.AddScoped<Service.Interface.IDeckService, DeckService>();
             services.AddScoped<IDeckRepository, DeckRepository>();
             services.AddScoped<IDeckCardRepository, DeckCardRepository>();
+            //services.AddScoped<IMessageHubClient, MessageHub>();
             services.AddMemoryCache();
 
             services.AddCors();
@@ -71,6 +75,8 @@ namespace MagicAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MagicAPI", Version = "v1" });
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,7 +104,9 @@ namespace MagicAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("/apphub");
             });
+
         }
     }
 }

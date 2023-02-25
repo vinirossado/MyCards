@@ -27,8 +27,8 @@ namespace MagicAPI.Models
             PowerLevel = powerLevel;
             Guild = guild;
             UpdatedAt = DateTime.UtcNow;
-
         }
+
         #endregion Constructors
 
         #region Methods
