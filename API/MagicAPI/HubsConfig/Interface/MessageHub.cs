@@ -1,78 +1,86 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using MagicAPI.Models;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MagicAPI.HubsConfig.Interface
 {
-    public class MessageHub : Hub<IMessageHubClient>
+    public partial class MessageHub : Hub<IMessageHubClient>, IBaseMessage
     {
-        public static ConcurrentDictionary<string, List<string>> ConnectedUsers = new ConcurrentDictionary<string, List<string>>();
-        public async Task SendOffersToUser(List<string> message)
+        private IHubContext<MessageHub, IMessageHubClient> _messageHub;
+
+        public MessageHub(IHubContext<MessageHub, IMessageHubClient> messageHub)
         {
-            await Clients.All.SendOffersToUser(message);
+            _messageHub = messageHub;
         }
+
+        public static ConcurrentDictionary<string, List<string>> ConnectedUsers = new ConcurrentDictionary<string, List<string>>();
+        public static IList<MessageHubModel> rooms = new List<MessageHubModel>();
 
         public override Task OnConnectedAsync()
         {
             Trace.TraceInformation("MapHub started. ID: {0}", Context.ConnectionId);
 
-            var userName = "testUserName1"; // or get it from Context.User.Identity.Name;
+            rooms.Add(
+                new MessageHubModel
+                {
+                    RoomId = Context.ConnectionId,
+                    RoomName = Context.ConnectionId
+                });
+
+            var userName = Guid.NewGuid().ToString(); // or get it from Context.User.Identity.Name;
 
             // Try to get a List of existing user connections from the cache
             List<string> existingUserConnectionIds;
             ConnectedUsers.TryGetValue(userName, out existingUserConnectionIds);
 
             // happens on the very first connection from the user
-            if (existingUserConnectionIds == null)
-            {
-                existingUserConnectionIds = new List<string>();
-            }
+            existingUserConnectionIds ??= new List<string>();
 
             // First add to a List of existing user connections (i.e. multiple web browser tabs)
             existingUserConnectionIds.Add(Context.ConnectionId);
-
 
             // Add to the global dictionary of connected users
             ConnectedUsers.TryAdd(userName, existingUserConnectionIds);
 
             return base.OnConnectedAsync();
         }
-
-        public Task JoinRoom(string roomName)
+        //public async Task SendOffersToUser(List<string> message) => await Clients.All.SendOffersToUser(message);
+        public async Task CreateRoom(string roomName)
         {
-            return Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+            await _messageHub.Clients.All.CreateRoom(roomName);
         }
 
-        public Task LeaveRoom(string roomName)
-        {
-            return Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
-        }
+        #region Useless
 
-        //public override Task OnDisconnectedAsync(Exception exception)
+        //public async Task CreateRoom(string roomName) => myGroups.Add(roomName);
+        //public async Task DeleteRoom(string roomName) => myGroups.Remove(roomName);
+        //public async Task<bool> CheckIfRoomExists(string roomName) => true;
+        //public Task LeaveRoom(string roomName) => Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+        public async Task<IList<MessageHubModel>> GetAllRooms()
+        {
+            await _messageHub.Clients.All.GetAllRooms(rooms);
+            return rooms;
+        }
+        //public async Task JoinRoom(string roomName)
         //{
-        //    MyUserType garbage;
+        //    if (await CheckIfRoomExists(roomName))
+        //    {
+        //        await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+        //        await Clients.Group(roomName).SendOffersToUser(new List<string>());
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("The room does not exists!");
+        //    }
+        //    await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+        //    Clients.Group(roomName);
 
-        //    MyUsers.TryRemove(Context.ConnectionId, out garbage);
-
-        //    return base.OnDisconnectedAsync(exception);
         //}
+        #endregion Useless
 
-        //public void PushData()
-        //{
-        //    //Values is copy-on-read but Clients.Clients expects IList, hence ToList()
-        //    Clients.Clients(MyUsers.Keys.ToList()).ClientBoundEvent(data);
-        //}
-
-
-        public class MyUserType
-        {
-            public string ConnectionId { get; set; }
-            // Can have whatever you want here
-        }
     }
 }

@@ -57,6 +57,7 @@ namespace MagicAPI
             services.AddScoped<Service.Interface.IDeckService, DeckService>();
             services.AddScoped<IDeckRepository, DeckRepository>();
             services.AddScoped<IDeckCardRepository, DeckCardRepository>();
+            services.AddScoped<IBaseMessage, MessageHub>();
             //services.AddScoped<IMessageHubClient, MessageHub>();
             services.AddMemoryCache();
 
